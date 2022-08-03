@@ -18,7 +18,9 @@ rateLimit({
 	legacyHeaders: false, // Disable the `X-RateLimit-*` headers
 	message: "Too many requests", // message to send
 });
-```
+```  
+![dDos]()  
+
 
 ## 2. Disable X-Powered-By header and etag
 
@@ -28,7 +30,8 @@ X-Powered-By header is a common non-standard HTTP response header used by many s
 ```javascript
 app.disable("x-powered-by");
 app.disable("etag");
-```
+```  
+![dDos]()  
 
 ## 3. Brute Forcing one specific user from different IPs
 
@@ -43,12 +46,20 @@ The solution is having a limited number of login attempts.
 -- If failed login, increment the `maxNumberOfFailedLogins` and store the new invalid login attempt in Redis cache.  
 -- On successful attempt delete the user attempt from Redis cache and send the successful response.  
 
+![dDos]()  
+
 
 ## 4. Implementation of Cross-origin resource sharing (CORS) mechanism 
 
 Cross-origin resource sharing (CORS) is a mechanism that allows a client application to request restricted resources hosted on server from a different origin. CORS defines a way in which a browser and server can interact to determine whether it is safe to allow the cross-origin request. If an application running on different domain tries to make a XMLHttpRequest to a different domain, it will be blocked by same-origin policy.  
 
-![alt text](http://url/to/img.png)  
+![same-origin](https://raw.githubusercontent.com/ashisdeveloper/cloud-security/main/files/same-origin.jpg)  
+The client and the server have the same origin. In this example, accessing resources will be successful. You’re trying to access resources on your server, and the same server handles the request.  
+
+![diffrent-origin](https://raw.githubusercontent.com/ashisdeveloper/cloud-security/main/files/diffrent-origin.jpg)  
+The client and server have a different origin from each other, i.e., accessing resources from a different server. In this case, trying to make a request to a resource on the other server will fail.
+
+This is a security concern for the browser. CORS comes into play to disable this mechanism and allow access to these resources. CORS will add a response header access-control-allow-origins and specify which origins are permitted. CORS ensures that we are sending the right headers.  
 
 -- First of all, install calls on your server-side app by running the command  
 -- Then you can add it as a middleware like this and add your allowed origins in the array.  

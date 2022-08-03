@@ -26,15 +26,15 @@ if (cluster.isMaster) {
 	const path = require("path");
 	const helmet = require("helmet");
 	const xss = require("xss-clean");
-	const Redis = require("ioredis"); //https://github.com/MicrosoftArchive/redis/releases/download/win-3.0.504/Redis-x64-3.0.504.msi
+	const IOredis = require("ioredis"); //https://github.com/MicrosoftArchive/redis/releases/download/win-3.0.504/Redis-x64-3.0.504.msi
 
-	const redis = new Redis();
+	const redis = new IOredis();
 	const maxNumberOfFailedLogins = 3;
 	const timeWindowForFailedLogins = 60 * 60 * 1;
 
 	const app = express();
-	app.disable("x-powered-by");
-	app.disable("etag");
+	/* app.disable("x-powered-by");
+	app.disable("etag"); */
 	app.use(helmet());
 	app.use(xss());
 	app.use(
@@ -70,27 +70,30 @@ if (cluster.isMaster) {
 	});
 
 	app.get("/api/login", async (req, res) => {
+		// await redis.del(req.query.username);
 		let orgUsername = 'johny';
 		let orgPassword = 'hellojohny';
 		// check user is not attempted too many login requests
 		let userAttempts = await redis.get(req.query.username) || 0;
-
-		if (userAttempts > maxNumberOfFailedLogins)
+		console.log(Number(userAttempts))
+		if (Number(userAttempts) > maxNumberOfFailedLogins)
 			return res.status(429).send("Too Many Attempts try it one hour later");
+		else {
+			const loginResult = false
+			// Let's check user
+			if (req.query.username === orgUsername && req.query.password === orgPassword)
+				return true
 
-		const loginResult = false
-		// Let's check user
-		if (req.query.username === orgUsername && req.query.password === orgPassword)
-			return true
-
-		// user attempt failed
-		if (!loginResult) {
-			await redis.set(req.query.username, ++userAttempts, "ex", timeWindowForFailedLogins);
-			res.send("failed");
-		} else {
-			// successful login
-			await redis.del(req.query.username);
-			res.send("success");
+			// user attempt failed
+			if (!loginResult) {
+				await redis.set(req.query.username, ++userAttempts, "ex", timeWindowForFailedLogins);
+				res.send("Login failed");
+			} else {
+				// successful login
+				if (userAttempts > 0)
+					await redis.del(req.query.username);
+				res.send("Login successful");
+			}
 		}
 	});
 }
