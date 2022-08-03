@@ -34,6 +34,7 @@
     "express-rate-limit": "^6.5.1",
     "express-useragent": "^1.0.15",
     "helmet": "^5.1.1",
+    "ioredis": "^5.2.2",
     "nodemon": "^2.0.19",
     "os": "^0.1.2",
     "path": "^0.12.7",
