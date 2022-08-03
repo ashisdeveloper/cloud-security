@@ -5,7 +5,7 @@
 DOS attacks are very popular and relatively easy to conduct. Implement rate limiting using a rate limiting middleware (express-rate-limit package).  
 Rate limiting should be implemented in your application to protect a Node.js application from being overwhelmed by too many requests at the same time.
 
--- In this project, we have Limited each IP to 10 requests per `window` (here, per 1 minutes). After 10 requests/minute, all incomming requests will be blocked by server.  
+-- In this project, we have Limited each IP to 10 requests per `window` (here, per 1 minutes). After 10 requests/minute, all incoming requests will be blocked by server.  
 -- It will Return rate limit info in the `RateLimit-*` headers  
 -- Disable the `X-RateLimit-*` headers  
 -- It will show `Too many requests` if request limit exceeds
@@ -19,7 +19,7 @@ rateLimit({
 	message: "Too many requests", // message to send
 });
 ```  
-![dDos]()  
+![dDos](https://raw.githubusercontent.com/ashisdeveloper/cloud-security/main/files/ddos.jpg)  
 
 
 ## 2. Disable X-Powered-By header and etag
@@ -31,7 +31,7 @@ X-Powered-By header is a common non-standard HTTP response header used by many s
 app.disable("x-powered-by");
 app.disable("etag");
 ```  
-![dDos]()  
+![dDos](https://raw.githubusercontent.com/ashisdeveloper/cloud-security/main/files/header.jpg)  
 
 ## 3. Brute Forcing one specific user from different IPs
 
@@ -46,7 +46,7 @@ The solution is having a limited number of login attempts.
 -- If failed login, increment the `maxNumberOfFailedLogins` and store the new invalid login attempt in Redis cache.  
 -- On successful attempt delete the user attempt from Redis cache and send the successful response.  
 
-![dDos]()  
+![dDos](https://raw.githubusercontent.com/ashisdeveloper/cloud-security/main/files/brute-force.jpg)  
 
 
 ## 4. Implementation of Cross-origin resource sharing (CORS) mechanism 
